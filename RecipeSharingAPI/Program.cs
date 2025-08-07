@@ -1,3 +1,6 @@
+using RecipeSharingAPI.CloudinaryConfgs;
+using RecipeSharingAPI.Helpers;
+
 namespace RecipeSharingAPI
 {
     public class Program
@@ -7,6 +10,11 @@ namespace RecipeSharingAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+
+            builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
