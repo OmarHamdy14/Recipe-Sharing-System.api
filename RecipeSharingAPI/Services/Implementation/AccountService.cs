@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RecipeSharingAPI.Helpers;
-using RecipeSharingAPI.Helpers.DTOs.UserDTOs;
+using RecipeSharingAPI.Helpers.DTOs.AccountDTOs;
 using RecipeSharingAPI.Models;
 using RecipeSharingAPI.Services.Interface;
 using System.IdentityModel.Tokens.Jwt;
@@ -39,13 +40,17 @@ namespace RecipeSharingAPI.Services.Implementation
         {
             return await _userManager.Users.ToListAsync();
         }
-        public async Task<AuthModel> Register(RegisterUserDTO model)
+        public async Task<AuthModel> Register(RegistrationDTO model)
         {
             if (await FindByEmail(model.Email) is not null) return new AuthModel() { Message = "Email is already registered." };
             //if (await FindByUserName(model.UserName) is not null) return new AuthModel() { Message = "User Name is already registered." };
             var user = _mapper.Map<ApplicationUser>(model);
             var res = await _userManager.CreateAsync(user);
-            if (res.Succeeded) return new AuthModel() { Message = "Registration is Succeeded.", IsAuthenticated = true };
+            if (res.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user,model.RoleName);
+                return new AuthModel() { Message = "Registration is Succeeded.", IsAuthenticated = true };
+            }
             return new AuthModel() { Message = res.Errors.ToString() };
         }
         public async Task<AuthModel> GetTokenAsync(LogInDTO model)

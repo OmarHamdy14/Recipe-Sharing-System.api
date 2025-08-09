@@ -17,7 +17,6 @@ namespace RecipeSharingAPI.Models
         }
         public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<IdentityRole> Roles { get; set; }
-        public DbSet<Chef> Chefs { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeImage> RecipeImages { get; set; }
     }

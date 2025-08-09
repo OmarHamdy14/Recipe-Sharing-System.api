@@ -1,6 +1,6 @@
-﻿namespace RecipeSharingAPI.Helpers.DTOs.UserDTOs
+﻿namespace RecipeSharingAPI.Helpers.DTOs.AccountDTOs
 {
-    public class RegistrationDTO
+    public class LogInDTO
     {
         public string Email { get; set; }
         public string Password { get; set; }

@@ -1,5 +1,7 @@
+using Microsoft.Extensions.DependencyInjection;
 using RecipeSharingAPI.CloudinaryConfgs;
 using RecipeSharingAPI.Helpers;
+using RecipeSharingAPI.SignalrServices;
 
 namespace RecipeSharingAPI
 {
@@ -13,6 +15,7 @@ namespace RecipeSharingAPI
 
             builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
+            builder.Services.AddSignalR();
             builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
@@ -34,8 +37,9 @@ namespace RecipeSharingAPI
 
             app.UseAuthorization();
 
-
+            app.UseRouting();   
             app.MapControllers();
+            app.MapHub<SearchRecipeHub>("/SearchRecipeHub");
 
             app.Run();
         }
