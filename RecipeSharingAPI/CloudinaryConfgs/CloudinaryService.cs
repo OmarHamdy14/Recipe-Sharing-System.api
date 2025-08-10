@@ -4,6 +4,8 @@ using Microsoft.Extensions.Options;
 using RecipeSharingAPI.Models;
 using RecipeSharingAPI.Base;
 using RecipeSharingAPI.Helpers.DTOs.Responses;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace RecipeSharingAPI.CloudinaryConfgs
 {
@@ -38,11 +40,9 @@ namespace RecipeSharingAPI.CloudinaryConfgs
             try
             {
                 using var stream = file.OpenReadStream();
-
                 var uploadParams = new ImageUploadParams
                 {
-                    File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Height(500).Width(500).Crop("fill")
+                    File = new FileDescription(file.FileName, stream)
                 };
 
                 var result = await _cloudinary.UploadAsync(uploadParams);
